@@ -1,0 +1,48 @@
+project: pytorch_template
+version: 0.0.1
+log_dir: logs
+seed: 42
+
+optimizer:
+  name: Adam
+  args:
+    lr: 0.003
+
+scheduler:
+  name: StepLR
+  args:
+    step_size: 100
+    gamma: 0.5
+
+loss:
+  name: L1Loss
+  args:
+    reduction: none
+
+trainer:
+  max_epochs: 800
+  accelerator: gpu
+  log_every_n_steps: 10
+
+data:
+  in_path_glob: /path/to/in_data/*
+  out_path_glob: /path/to/out_data/*
+
+  batch_size: 128
+  num_workers: 8
+  split: [0.8, 0.1, 0.1]
+
+model:
+
+callbacks:
+  EarlyStopping:
+    monitor: val_loss
+    patience: 15
+    mode: min
+
+  ModelCheckpoint:
+    monitor: val_loss
+    save_top_k: 1
+    dirpath: checkpoints
+    filename: '{epoch}_{val_loss:.4f}'
+    mode: min
