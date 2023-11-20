@@ -1,4 +1,4 @@
-# pytorch_template
+# ss_sample1
 
 ## Requirements
 
@@ -10,13 +10,8 @@
 ### Prepare
 
 ```shell
-sed -i 's/pytorch_template/<your-project-name>/g' pyproject.toml
-mv -rf pytorch_template <your-project-name>
-
 poetry install
 ```
-
-And then, edit config files in `conf/` directory.
 
 ### Train
 

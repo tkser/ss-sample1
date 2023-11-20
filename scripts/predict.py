@@ -7,8 +7,8 @@ from omegaconf import OmegaConf
 from torch import from_numpy, set_float32_matmul_precision
 from tqdm import tqdm
 
-from pytorch_template.config import Config
-from pytorch_template.model import LitModule
+from ss_sample1.config import Config
+from ss_sample1.model import LitModule
 
 
 def predict(

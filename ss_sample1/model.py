@@ -3,8 +3,8 @@ from lightning import LightningModule
 from lightning.pytorch.utilities.types import STEP_OUTPUT
 from torch import Tensor, nn, optim
 
-from pytorch_template.config import Config
-from pytorch_template.networks.predictor import Predictor
+from ss_sample1.config import Config
+from ss_sample1.networks.predictor import Predictor
 
 
 class LitModule(LightningModule):

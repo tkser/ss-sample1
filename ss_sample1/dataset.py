@@ -5,7 +5,7 @@ from lightning import LightningDataModule
 from torch.utils.data import DataLoader
 from torch.utils.data import Dataset as TorchDataset
 
-from pytorch_template.config import DataConfig
+from ss_sample1.config import DataConfig
 
 
 class Dataset(TorchDataset):

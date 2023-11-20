@@ -7,9 +7,9 @@ from lightning.pytorch.loggers import WandbLogger
 from omegaconf import OmegaConf
 from torch import set_float32_matmul_precision
 
-from pytorch_template.config import Config
-from pytorch_template.dataset import DataModule
-from pytorch_template.model import LitModule
+from ss_sample1.config import Config
+from ss_sample1.dataset import DataModule
+from ss_sample1.model import LitModule
 
 
 def train(

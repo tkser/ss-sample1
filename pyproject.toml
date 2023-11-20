@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "pytorch_template"
+name = "ss_sample1"
 version = "0.1.0"
 description = ""
 authors = ["tksnn <tkser.edu@gmail.com>"]
