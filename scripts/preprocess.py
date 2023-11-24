@@ -49,7 +49,7 @@ def preprocess(cfg: Config) -> None:
     logging.info("Preprocess")
 
     output_dir = Path(cfg.preprocess.output_dir)
-    output_dir.mkdir(exist_ok=True)
+    output_dir.mkdir(exist_ok=True, parents=True)
 
     wav_files = sorted(Path().glob(cfg.preprocess.wav_glob))
     lab_files = sorted(Path().glob(cfg.preprocess.lab_glob))
