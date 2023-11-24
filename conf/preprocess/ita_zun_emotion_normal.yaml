@@ -1,0 +1,22 @@
+preprocess:
+  wav_glob: "data/ita_zun_emotion_normal/wav/*.wav"
+  lab_glob: "data/ita_zun_emotion_normal/lab/*.lab"
+  output_dir: "data/preprocessed/ita_zun_emotion_normal"
+  strict_lab: false
+
+label:
+  sec_unit: 10000000
+
+wave:
+  sampling_rate: 96000
+  max_wav_value: 32768.0
+
+stft:
+  hop_length: 256
+  win_length: 1024
+  filter_length: 1024
+
+mel:
+  n_mel_channels: 80
+  mel_fmin: 0.0
+  mel_fmax: 8000.0

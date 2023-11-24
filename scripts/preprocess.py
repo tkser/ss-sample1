@@ -174,9 +174,9 @@ def preprocess(cfg: Config) -> None:
     pitch_mean = pitch_scaler.mean_[0]
     pitch_std = pitch_scaler.scale_[0]
     pitch_min, pitch_max = np.finfo(np.float32).max, np.finfo(np.float32).min
-    for wav_file in tqdm(wav_files, total=len(wav_files), desc="Normalize pitch"):
-        wav_id = wav_file.stem
-        pitch_file = output_dirs["pitch"] / f"{wav_id}.npy"
+    for lab_file in tqdm(lab_files, total=len(lab_files), desc="Normalize pitch"):
+        lab_id = lab_file.stem
+        pitch_file = output_dirs["pitch"] / f"{lab_id}.npy"
         pitch = np.load(pitch_file)
         pitch = (pitch - pitch_mean) / pitch_std
         np.save(pitch_file, pitch)
