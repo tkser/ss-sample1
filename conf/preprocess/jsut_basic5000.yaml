@@ -1,7 +1,8 @@
 preprocess:
-  wav_glob: "data/jsut_basic5000/BASIC5000*.wav"
-  lab_glob: "data/jsut_basic5000/BASIC5000*.lab"
+  wav_glob: "data/jsut_basic5000/wav/*.wav"
+  lab_glob: "data/jsut_basic5000/lab/*.lab"
   output_dir: "data/preprocessed/jsut_basic5000"
+  strict_lab: false
 
 label:
   sec_unit: 10000000

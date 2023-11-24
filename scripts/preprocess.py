@@ -35,7 +35,7 @@ def remove_outlier(values: np.ndarray) -> np.ndarray:
     p75 = np.percentile(values, 75)
     lower = p25 - 1.5 * (p75 - p25)
     upper = p75 + 1.5 * (p75 - p25)
-    normal_indices = np.where((values > lower) & (values < upper))[0]
+    normal_indices = np.logical_and(values > lower, values < upper)
     return values[normal_indices]
 
 
@@ -51,10 +51,16 @@ def preprocess(cfg: Config) -> None:
     output_dir = Path(cfg.preprocess.output_dir)
     output_dir.mkdir(exist_ok=True, parents=True)
 
-    wav_files = sorted(Path().glob(cfg.preprocess.wav_glob))
-    lab_files = sorted(Path().glob(cfg.preprocess.lab_glob))
+    current_dir = Path.cwd()
+    logging.info(f"Current directory: {current_dir}")
 
-    if len(wav_files) == len(lab_files):
+    wav_files = sorted(current_dir.glob(cfg.preprocess.wav_glob))
+    lab_files = sorted(current_dir.glob(cfg.preprocess.lab_glob))
+
+    logging.info(f"Number of wav files: {len(wav_files)}")
+    logging.info(f"Number of lab files: {len(lab_files)}")
+
+    if cfg.preprocess.strict_lab and len(wav_files) == len(lab_files):
         msg = "Number of wav and lab files are the same."
         raise ValueError(msg)
 
@@ -81,9 +87,15 @@ def preprocess(cfg: Config) -> None:
         mel_fmax=cfg.mel.mel_fmax,
     )
 
-    for wav_file, lab_file in tqdm(zip(wav_files, lab_files, strict=True), total=len(wav_files), desc="Preprocess"):
-        wav_id = wav_file.stem
+    for i, lab_file in enumerate(tqdm(lab_files, total=len(wav_files), desc="Preprocess")):
         lab_id = lab_file.stem
+
+        wav_file = wav_files[0].parent / f"{lab_id}.wav"
+        wav_id = lab_id
+
+        if cfg.preprocess.strict_lab:
+            wav_file = wav_files[i]
+            wav_id = wav_file.stem
 
         if wav_id != lab_id:
             msg = f"wav_id ({wav_id}) and lab_id ({lab_id}) are different."
@@ -102,7 +114,7 @@ def preprocess(cfg: Config) -> None:
             raise ValueError(msg)
 
         wav = wav / cfg.wave.max_wav_value
-        wav = normalize(wav)
+        wav = normalize(wav) * 0.95
         wav = wav[int(cfg.wave.sampling_rate * start_time) : int(cfg.wave.sampling_rate * end_time)].astype(np.float32)
 
         pitch, t = pw.dio(
@@ -127,25 +139,25 @@ def preprocess(cfg: Config) -> None:
         pitch = interp_fn(np.arange(0, len(pitch)))
 
         _pos = 0
-        for i, d in enumerate(durations):
+        for m, d in enumerate(durations):
             if d > 0:
-                pitch[i] = np.mean(pitch[_pos : _pos + d])
+                pitch[m] = np.mean(pitch[_pos : _pos + d])
             else:
-                pitch[i] = 0
+                pitch[m] = 0
             _pos += d
-        pitch = pitch[:, len(durations)]
+        pitch = pitch[: len(durations)]
 
         mel_spec = get_mel_from_wav(wav, stft)
         mel_spec = mel_spec[:, : sum(durations)]
 
-        accent = list(label.get_accent_ids())
+        accents = list(label.get_accent_ids())
 
         pitch_r = remove_outlier(pitch)
         n_frame = mel_spec.shape[1]
         n_frames += n_frame
 
         if len(pitch_r) > 0:
-            pitch_scaler.partial_fit(pitch_r.reshape(-1, 1))
+            pitch_scaler.partial_fit(pitch_r.reshape((-1, 1)))
 
         duration_file = output_dirs["duration"] / f"{wav_id}.npy"
         pitch_file = output_dirs["pitch"] / f"{wav_id}.npy"
@@ -155,7 +167,7 @@ def preprocess(cfg: Config) -> None:
         np.save(duration_file, durations)
         np.save(pitch_file, pitch)
         np.save(mel_file, mel_spec.T)
-        np.save(accent_file, accent)
+        np.save(accent_file, accents)
 
     logging.info("Normalize pitch")
 

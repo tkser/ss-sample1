@@ -6,6 +6,7 @@ class PathConfig:
     wav_glob: str = "*.wav"
     lab_glob: str = "*.lab"
     output_dir: str = "data"
+    strict_lab: bool = True
 
 
 @dataclass

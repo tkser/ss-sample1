@@ -2,6 +2,7 @@ preprocess:
   wav_glob: "*.wav"
   lab_glob: "*.lab"
   output_dir: "data"
+  strict_lab: true
 
 label:
   sec_unit: 1.0
