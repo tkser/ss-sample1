@@ -1,0 +1,21 @@
+preprocess:
+  wav_glob: "*.wav"
+  lab_glob: "*.lab"
+  output_dir: "data"
+
+label:
+  sec_unit: 1.0
+
+wave:
+  sampling_rate: 48000
+  max_wav_value: 32768.0
+
+stft:
+  hop_length: 256
+  win_length: 1024
+  filter_length: 1024
+
+mel:
+  n_mel_channels: 80
+  mel_fmin: 0.0
+  mel_fmax: 8000.0
