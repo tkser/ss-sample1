@@ -7,7 +7,7 @@ from lightning.pytorch.loggers import WandbLogger
 from omegaconf import OmegaConf
 from torch import set_float32_matmul_precision
 
-from ss_sample1.config import Config
+from ss_sample1.configs.train import Config
 from ss_sample1.dataset import DataModule
 from ss_sample1.model import LitModule
 
@@ -46,7 +46,7 @@ def train(
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument("--config", type=Path, default="conf/default_config.yaml")
+    parser.add_argument("--config", type=Path, default="conf/train/default_config.yaml")
     args = parser.parse_args()
 
     base_cfg = OmegaConf.structured(Config)

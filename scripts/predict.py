@@ -7,7 +7,7 @@ from omegaconf import OmegaConf
 from torch import from_numpy, set_float32_matmul_precision
 from tqdm import tqdm
 
-from ss_sample1.config import Config
+from ss_sample1.configs.train import Config
 from ss_sample1.model import LitModule
 
 
@@ -36,7 +36,7 @@ def predict(
 
 if __name__ == "__main__":
     parser = ArgumentParser()
-    parser.add_argument("--config", type=Path, default="conf/default_config.yaml")
+    parser.add_argument("--config", type=Path, default="conf/train/default_config.yaml")
     parser.add_argument("--input", "-i", type=str, required=True)
     parser.add_argument("--output", "-o", type=Path, required=True)
     parser.add_argument("--model-path", type=Path, required=True)
